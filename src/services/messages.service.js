@@ -3,8 +3,6 @@ import { MessagesException } from '../exceptions/messages.exceptions.js';
 
 export class MessageService {
   validatePostMsg(email, msg) {
-    console.log(email);
-    console.log(msg);
     if (!email || !msg) {
       throw new MessagesException("Please, complete email and message", 400);
     }

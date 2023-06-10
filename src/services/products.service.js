@@ -106,7 +106,6 @@ export class ProductService {
      */
     async isCodeRepeated(code) {
         const product = await ProductModel.find({ code: code });
-        console.log(product);
         return product.length > 0;
     }
 

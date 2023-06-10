@@ -3,7 +3,6 @@ const socket = io();
 const btnNew = document.getElementById('new')
 
 btnNew.onclick = e => {
-    console.log("1")
     e.preventDefault()
     const title = document.getElementById('title').value
     const description = document.getElementById('description').value
@@ -32,11 +31,9 @@ btnNew.onclick = e => {
         document.getElementById('category').value = ''
         document.getElementById('thumbnail').value = ''
     }
-    console.log("2")
 }
 
 socket.on("new_item", data => {
-    console.log(JSON.stringify(data));
     addDataToItems(data);
 })
 

@@ -39,7 +39,6 @@ app.use("/chat", routerMessages);
 
 io.on('connection', (socket) => {
   socket.on('add_product', async (newProduct) => {
-    console.log(newProduct);
     try {
       const addedProduct = await productService.addProduct(newProduct);
       io.emit("new_item", addedProduct);
@@ -48,7 +47,6 @@ io.on('connection', (socket) => {
     }
   });
   socket.on('send_message', async (data) => {
-    console.log(data);
     try {
       const addedMessage = await messageService.addMessage(data);
       io.emit('new_message', addedMessage);
