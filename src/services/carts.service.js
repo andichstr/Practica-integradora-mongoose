@@ -1,6 +1,7 @@
 //@ts-check
 import { CartModel } from '../daos/models/carts.model.js';
 import { CartsException } from '../exceptions/carts.exceptions.js';
+import { ProductsException } from '../exceptions/products.exceptions.js';
 import { ProductService } from './products.service.js'
 
 export class CartService {
@@ -35,14 +36,35 @@ export class CartService {
      * @param {String} productId
      */
     async addProductToCart(cartId, productId) {
-        if (!await this.productService.checkStock(productId)) return null;
-        //si pasa ambas condiciones, agrego el producto al carrito
-        //y disminuyo stock del producto.
-        const cart = await CartModel.findById(cartId);
-        if (!cart) throw new CartsException("Cart not found", 404);
-        cart.products.push(productId);
-        await this.productService.reduceProductStock(productId);
-        await CartModel.findOneAndUpdate({_id: cartId}, cart.products);
-        return await this.productService.getProductById(productId);
+        const hasStock = await this.productService.checkStock(productId)
+        if (hasStock) {
+            const cart = await CartModel.findById(cartId);
+            if (!cart) throw new CartsException("Cart not found", 404);
+            const productIndex = this.productInCart(cart, productId);
+            console.log(productIndex);
+            console.log(cart.products[productIndex]);
+            if (productIndex>=0) cart.products[productIndex].quantity++;
+            else cart.products.push({pid: productId, quantity: 1});
+            await this.productService.reduceProductStock(productId);
+            const filter = {_id:cartId}
+            await CartModel.updateOne(filter, cart);
+            return await this.productService.getProductById(productId);
+        } else {
+            throw new ProductsException(`Product with id ${productId} doesn't have stock`, 400);
+        }
+    }
+    /**
+     * @param {Object} cart
+     * @param {String} pid
+     */
+    productInCart(cart, pid) {
+        let productInCart = false;
+        let i = 0;
+        while (!productInCart && i<cart.products.length) {
+            if (pid == cart.products[i].pid) productInCart = true;
+            i++;
+        }
+        i -= 1
+        return productInCart ? i : -1;
     }
 }

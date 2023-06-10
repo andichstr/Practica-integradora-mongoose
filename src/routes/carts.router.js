@@ -18,7 +18,7 @@ router.post("/", async (req, res) => {
             status: "Error",
             message: `${e.name}: ${e.message}`,
             data: null
-        })
+        });
     }
 });
 
@@ -32,7 +32,6 @@ router.get('/:cid', async (req, res) => {
             data: !!cart ? cart.products : []
         })
     } catch (e) {
-        console.log(e);
         return res.status(e.status||500).json({
             status: "Error",
             message: `${e.name}: ${e.message}`,

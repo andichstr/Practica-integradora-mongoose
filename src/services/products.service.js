@@ -40,7 +40,8 @@ export class ProductService {
      */
     async getProductById(id) {
         const foundProduct = await ProductModel.findById(id);
-        if(!foundProduct?.$isEmpty) return foundProduct;
+        console.log(foundProduct);
+        if(!!foundProduct) return foundProduct;
         else throw new ProductsException(`Product with id: ${id} not found.`, 404);
     }
 
@@ -51,14 +52,14 @@ export class ProductService {
     async updateProduct(id, product) {
         await ProductModel.validate(product);
         const filter = {_id: id};
-        return await ProductModel.findOneAndUpdate(filter, product);
+        await ProductModel.updateOne(filter, product);
     }
 
     /**
      * @param {string} id
      */
     async deleteProduct(id) {
-        await ProductModel.deleteOne({_id: id});
+        return await ProductModel.deleteOne({_id: id});
     }
 
     /**

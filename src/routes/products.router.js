@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
 router.get('/:pid', async (req, res) => {
     try {
         const id = req.params.pid;
-        const response = service.getProductById(id);
+        const response = await service.getProductById(id);
         if (!!response) return res.status(200).json({
             status: "Success",
             message: "Product found",
@@ -47,7 +47,8 @@ router.get('/:pid', async (req, res) => {
 
 router.post("/", async (req, res) => {
     try{
-        if (!!req.body){
+        if(Object.keys(req.body).length !== 0) {
+            console.log(req.body);
             const product = req.body;
             const response = await service.addProduct(product);
             return res.status(201).json({
@@ -97,11 +98,19 @@ router.put("/:pid", async (req, res) => {
 router.delete('/:pid', async (req, res) => {
     try {
         const id = req.params.pid;
-        await service.deleteProduct(id);
-        return res.status(200).json({
-            status: "Success",
-            message: `Product with id=${id} was successfully deleted`
-        })
+        const resp = await service.deleteProduct(id);
+        console.log(resp);
+        if (resp.deletedCount!=0){
+            return res.status(200).json({
+                status: "Success",
+                message: `Product with id=${id} was successfully deleted`
+            })
+        } else {
+            return res.status(404).json({
+                status: "Not Found",
+                message: `Product with id=${id} was not found in the database`
+            })
+        }
     } catch (e) {
         return res.status(e.status).json({
             status: "Error",
