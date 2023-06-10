@@ -1,0 +1,22 @@
+<link rel="stylesheet" href="/css/home.css" />
+<main>
+    <h1>Lista completa de productos</h1>
+    <section class="productCatalog">
+    {{#each products}}
+        <div class="productCard">
+            <h3>{{this.title}}</h3>
+            <ul>
+                <li>ID: {{this.id}}</li>
+                <li>Description: {{this.description}}</li>
+                <li>Code: {{this.code}}</li>
+                <li>Price: {{this.price}}</li>
+                <li>Status: {{this.status}}</li>
+                <li>Stock: {{this.stock}}</li>
+                <li>Category: {{this.category}}</li>
+                <li>Thumbnails: {{this.thumbnails}}</li>
+            </ul>
+        </div>
+    {{/each}}
+    </section>
+</main>
+<script src="/js/home.js"></script>

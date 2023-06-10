@@ -1,0 +1,25 @@
+body {
+    font-family: system-ui;
+}
+h1, h3 {
+    text-align: center;
+}
+.productCatalog {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.productCard {
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex-basis: 33%;
+    justify-content: center;
+    align-items: center;
+    border: 1.5px solid darkblue;
+    border-radius: 5vh;
+    margin-right: 2px;
+}
+.productCard:hover {
+    box-shadow: 3px 3px 3px blue;
+    transition: box-shadow .2s;
+}
